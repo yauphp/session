@@ -1,5 +1,5 @@
 <?php
-namespace swiftphp\session;
+namespace Yauphp\Session;
 
 /**
  * session接口

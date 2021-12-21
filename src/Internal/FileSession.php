@@ -1,10 +1,10 @@
 <?php
-namespace swiftphp\session\internal;
+namespace Yauphp\Session\Internal;
 
 use Yauphp\Cache\ICacher;
-use swiftphp\session\ISession;
 use Yauphp\Common\Util\SecurityUtils;
 use Yauphp\Common\Util\AppUtils;
+use Yauphp\Session\ISession;
 
 /**
  * 文件依赖Session
