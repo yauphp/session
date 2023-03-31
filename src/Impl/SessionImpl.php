@@ -1,5 +1,5 @@
 <?php
-namespace Yauphp\Session\Internal;
+namespace Yauphp\Session\Impl;
 
 use Yauphp\Cache\ICacher;
 use Yauphp\Common\Util\SecurityUtils;
@@ -7,11 +7,11 @@ use Yauphp\Common\Util\AppUtils;
 use Yauphp\Session\ISession;
 
 /**
- * 文件依赖Session
+ * ISession实现类
  * @author Tomix
  *
  */
-class FileSession implements ISession
+class SessionImpl implements ISession
 {
     /**
      * 保存session id到cookie的键
@@ -41,8 +41,7 @@ class FileSession implements ISession
      * 设置缓存器对象
      * @param ICacher $value
      */
-    public function setCacher(ICacher $value)
-    {
+    public function setCacher(ICacher $value){
         $this->m_cacher=$value;
     }
 
@@ -50,17 +49,15 @@ class FileSession implements ISession
      * 获取缓存器对象
      * @return ICacher
      */
-    protected function getCacher()
-    {
+    protected function getCacher(){
         return $this->m_cacher;
     }
 
     /**
      * 从session读取
-     * @return mixed|NULL
+     * @return mixed
      */
-    public function get($sessionKey)
-    {
+    public function get($sessionKey){
         $session=$this->getCurrentSession();
         if($session!=null && is_array($session) && array_key_exists($sessionKey, $session)){
             return $session[$sessionKey];
@@ -72,8 +69,7 @@ class FileSession implements ISession
      * 从session读取所有的数据
      * @return array
      */
-    public function getAll()
-    {
+    public function getAll(){
         return $this->getCurrentSession();
     }
 
@@ -81,8 +77,7 @@ class FileSession implements ISession
      * 写入session
      * @return void
      */
-    public function set($sessionKey,$value)
-    {
+    public function set($sessionKey,$value){
         $session=$this->getCurrentSession();
         if(empty($session)){
             $session=[];
@@ -96,8 +91,7 @@ class FileSession implements ISession
      * {@inheritDoc}
      * @see \swiftphp\core\system\ISession::getSessionId()
      */
-    public function getSessionId()
-    {
+    public function getSessionId(){
         $sessionId=$this->m_currentSessionId;
         if(empty($sessionId)){
             $sessionId=isset($_COOKIE[self::COOKIE_KEY])?$_COOKIE[self::COOKIE_KEY]:"";
@@ -114,8 +108,7 @@ class FileSession implements ISession
      * {@inheritDoc}
      * @see \swiftphp\core\system\ISession::remove()
      */
-    public function remove($sessionKey)
-    {
+    public function remove($sessionKey){
         $session=$this->getCurrentSession();
         if($session!=null && is_array($session) && array_key_exists($sessionKey, $session)){
             unset($session[$sessionKey]);
@@ -128,8 +121,7 @@ class FileSession implements ISession
      * {@inheritDoc}
      * @see \swiftphp\core\system\ISession::clear()
      */
-    public function clear()
-    {
+    public function clear(){
         $sessionId=$this->getSessionId();
         $this->getCacher()->remove($sessionId);
     }
@@ -139,8 +131,7 @@ class FileSession implements ISession
      * {@inheritDoc}
      * @see \swiftphp\core\system\ISession::setSessionId()
      */
-    public function setSessionId($value)
-    {
+    public function setSessionId($value){
         $this->m_currentSessionId=$value;
     }
 
@@ -148,8 +139,7 @@ class FileSession implements ISession
      * 获取当前的所有session数据
      * @return array
      */
-    protected function getCurrentSession()
-    {
+    protected function getCurrentSession(){
         if(empty($this->m_currentSession)){
             $sessionId=$this->getSessionId();
             $cacher=$this->getCacher();
@@ -168,8 +158,7 @@ class FileSession implements ISession
      * 设置到Session
      * @param array $value
      */
-    protected function setCurrentSession(array $value)
-    {
+    protected function setCurrentSession(array $value) {
         $sessionId=$this->getSessionId();
         $this->getCacher()->set($sessionId, $value);
         $this->m_currentSession=null;
