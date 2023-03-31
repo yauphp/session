@@ -11,7 +11,7 @@ use Yauphp\Session\ISession;
  * @author Tomix
  *
  */
-class SessionImpl implements ISession
+class Session implements ISession
 {
     /**
      * 保存session id到cookie的键
